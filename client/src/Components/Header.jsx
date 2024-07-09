@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Hero from "./Hero";
 import Middle from "./Middle";
 import Info from "./Info";
+import Subscription from "./Subscription";
 
 const Header = () => {
   return (
@@ -34,6 +35,7 @@ const Header = () => {
       <Hero />
       <Middle />
       <Info />
+      <Subscription />
     </div>
   );
 };
