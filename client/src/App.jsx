@@ -1,9 +1,11 @@
 import Header from "./Components/Header";
+import Splitter from "./Components/SplitterPage/Splitter";
 
 const App = () => {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
+      <Splitter />
     </div>
   );
 };
