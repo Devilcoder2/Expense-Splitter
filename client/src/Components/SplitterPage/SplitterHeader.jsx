@@ -4,26 +4,26 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 const SplitterHeader = () => {
   return (
-    <div className="flex justify-between mt-3 items-center">
+    <div className="flex justify-between pt-3 items-center ">
       {/* Backbutton  */}
-      <div>
+      <div className="hover:cursor-pointer">
         <h4>
-          <IoIosArrowRoundBack fontSize={"30px"} />
+          <IoIosArrowRoundBack fontSize={"40px"} />
         </h4>
       </div>
 
       {/* Group Name  */}
-      <div className="flex items-center">
-        <h3>
-          <RxAvatar fontSize={"30px"} />
+      <div className="flex items-center hover:cursor-pointer">
+        <h3 className="mr-2">
+          <RxAvatar fontSize={"40px"} />
         </h3>
-        <h1>Group Name</h1>
+        <h1 className=" text-xl">Group Name</h1>
       </div>
 
       {/* Owned by you / to  */}
-      <div>
+      <div className="hover:cursor-pointer">
         <h1>
-          <FaMoneyBillTransfer fontSize={"30px"} />
+          <FaMoneyBillTransfer fontSize={"40px"} />
         </h1>
       </div>
     </div>
