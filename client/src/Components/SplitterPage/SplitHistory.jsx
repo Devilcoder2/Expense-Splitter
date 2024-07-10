@@ -1,5 +1,11 @@
+import HistoryCard from "./HistoryCard";
+
 const SplitHistory = () => {
-  return <div>This is history....</div>;
+  return (
+    <div className="pt-10">
+      <HistoryCard />
+    </div>
+  );
 };
 
 export default SplitHistory;
