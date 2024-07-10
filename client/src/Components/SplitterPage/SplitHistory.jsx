@@ -1,5 +1,5 @@
 const SplitHistory = () => {
-  return <div>SplitHistory</div>;
+  return <div>This is history....</div>;
 };
 
 export default SplitHistory;

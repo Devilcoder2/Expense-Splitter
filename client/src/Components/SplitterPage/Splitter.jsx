@@ -4,7 +4,7 @@ import SplitterHeader from "./SplitterHeader";
 
 const Splitter = () => {
   return (
-    <div>
+    <div className="px-10 ">
       <SplitterHeader />
       <SplitHistory />
       <NewSplit />
