@@ -3,6 +3,7 @@ import Hero from "./Hero";
 import Middle from "./Middle";
 import Info from "./Info";
 import Subscription from "./Subscription";
+import Footer from "./Footer";
 
 const Header = () => {
   return (
@@ -36,6 +37,7 @@ const Header = () => {
       <Middle />
       <Info />
       <Subscription />
+      <Footer />
     </div>
   );
 };

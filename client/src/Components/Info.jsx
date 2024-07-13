@@ -1,7 +1,7 @@
 const Info = () => {
   return (
     <>
-      <div className="flex flex-col items-center py-8">
+      <div className="flex flex-col items-center py-8" id="faq">
         <h2 className="text-2xl font-bold mb-8">WHY USE Splitster?</h2>
         <div className="flex flex-wrap justify-center gap-8 mb-24">
           <div className="max-w-xs rounded overflow-hidden shadow-lg bg-white">
