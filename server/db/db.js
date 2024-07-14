@@ -26,11 +26,27 @@ const userSchema = new Schema({
       ref: "Group",
     },
   ],
+  totalOwedByYou: {
+    type: Number,
+    default: 0,
+  },
+  totalOwedToYou: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const memberSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   owedByYou: {
     type: Number,
     default: 0,
   },
-  owedToYou: {
+  owedToMe: {
     type: Number,
     default: 0,
   },
@@ -46,12 +62,7 @@ const groupsSchema = new Schema({
     ref: "User",
     required: true,
   },
-  members: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  members: [memberSchema],
   expenses: [
     {
       type: Schema.Types.ObjectId,
