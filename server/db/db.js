@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost:27017/expenseSplitter");
 
-const userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -26,7 +28,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-const groupsSchema = new mongoose.Schema({
+const groupsSchema = new Schema({
   groupName: {
     type: String,
     required: true,
@@ -50,7 +52,7 @@ const groupsSchema = new mongoose.Schema({
   ],
 });
 
-const userInExpenseSchema = new mongoose.Schema({
+const userInExpenseSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -66,7 +68,7 @@ const userInExpenseSchema = new mongoose.Schema({
   },
 });
 
-const singleExpensesSchema = new mongoose.Schema({
+const singleExpensesSchema = new Schema({
   description: {
     type: String,
     required: true,
@@ -87,7 +89,7 @@ const singleExpensesSchema = new mongoose.Schema({
   userInExpsense: [userInExpenseSchema],
 });
 
-const expensesSchema = new mongoose.Schema({
+const expensesSchema = new Schema({
   groupId: {
     type: Schema.Types.ObjectId,
     ref: "Group",
