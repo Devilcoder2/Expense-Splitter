@@ -1,5 +1,9 @@
 const { Router } = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const { User } = require("./../db/db.js");
+
+const JWT_SECRET = "raman";
 
 const router = Router();
 
@@ -30,7 +34,36 @@ router.post("/register", async (req, res) => {
   });
 });
 
-router.post("/login", (req, res) => {});
+router.post("/login", async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    return res.status(403).json({
+      msg: "Wrong username or password",
+    });
+  }
+
+  const hashedPassword = await bcrypt.compare(password, user.password);
+
+  if (!hashedPassword) {
+    return res.status(403).json({
+      msg: "Wrong username or password",
+    });
+  }
+
+  if (user.email) {
+    const token = jwt.sign(email, JWT_SECRET);
+    res.status(200).json({
+      msg: "User Login Successfull",
+      token,
+    });
+  }
+});
 
 router.get("/allGroupsDebts", (req, res) => {});
 
