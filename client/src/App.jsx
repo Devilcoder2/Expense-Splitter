@@ -1,7 +1,4 @@
-import Header from "./Components/Header";
-// import Splitter from "./Components/SplitterPage/Splitter";
-
-// import AllGroups from "./Components/AllGroups/AllGroups";
+import Header from "./Components/HomePage/Header";
 
 const App = () => {
   return (
