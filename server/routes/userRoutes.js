@@ -1,9 +1,34 @@
-const { User } = require("./../db/db.js");
 const { Router } = require("express");
+const { User } = require("./../db/db.js");
 
 const router = Router();
 
-router.post("/register", (req, res) => {});
+router.post("/register", async (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const image = req.body.image;
+
+  const userExists = await User.find({ email });
+
+  if (userExists.length !== 0) {
+    return res.status(200).json({
+      msg: "User alerady exits",
+    });
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    image,
+  });
+
+  res.status(200).json({
+    msg: "Account created successfully",
+    user,
+  });
+});
 
 router.post("/login", (req, res) => {});
 
