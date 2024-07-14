@@ -26,8 +26,34 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+const groupsSchema = new mongoose.Schema({
+  groupName: {
+    type: String,
+    required: true,
+  },
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  members: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  expenses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Expense",
+    },
+  ],
+});
+
 const User = mongoose.model("User", userSchema);
+const Group = mongoose.model("Group", groupsSchema);
 
 module.exports = {
   User,
+  Group,
 };
