@@ -26,6 +26,14 @@ const userSchema = new Schema({
       ref: "Group",
     },
   ],
+  owedByYou: {
+    type: Number,
+    default: 0,
+  },
+  owedToYou: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const groupsSchema = new Schema({
