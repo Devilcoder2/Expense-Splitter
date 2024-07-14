@@ -1,4 +1,4 @@
-import Header from "./Components/Header";
+import Header from "./Components/HomePage/Header";
 
 const App = () => {
   return (
