@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 mongoose.connect("mongodb://localhost:27017/expenseSplitter");
 
@@ -12,18 +13,21 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
   },
   image: {
-    type: String,
+    type: Number,
+    default: 1,
   },
   groups: [
     {
       type: Schema.Types.ObjectId,
       ref: "Group",
+      default: [],
     },
   ],
   totalOwedByYou: {
@@ -115,6 +119,22 @@ const expensesSchema = new Schema({
     required: true,
   },
   singleExpenses: [singleExpensesSchema],
+});
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (!user.isModified("password")) {
+    next();
+  }
+
+  try {
+    const saltRound = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, saltRound);
+    user.password = hashedPassword;
+  } catch (error) {
+    next(error);
+  }
 });
 
 const User = mongoose.model("User", userSchema);
