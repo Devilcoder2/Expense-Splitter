@@ -6,11 +6,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Features from "./Components/Features.jsx";
 import Login from "./Components/Login.jsx";
 import Signup from "./Components/Signup.jsx";
+import AllGroups from "./Components/AllGroups/AllGroups.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/groups",
+    element: <AllGroups />,
   },
   {
     path: "/features",

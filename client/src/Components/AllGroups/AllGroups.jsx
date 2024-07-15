@@ -1,5 +1,15 @@
+import { useNavigate } from "react-router-dom";
+import GroupHeader from "./GroupHeader";
+import ExistingGroups from "./ExistingGroups";
+
 const AllGroups = () => {
-  return <div className="bg-pink-500 w-[100vw] h-[100vh]"></div>;
+  const navigate = useNavigate();
+  return (
+    <div>
+      <GroupHeader />
+      <ExistingGroups />
+    </div>
+  );
 };
 
 export default AllGroups;
