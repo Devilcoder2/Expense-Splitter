@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { User, Group } = require("./../db/db.js");
+const { User, Group, Expense } = require("./../db/db.js");
 
 const JWT_SECRET = "raman";
 
@@ -122,6 +122,8 @@ router.post("/newGroup", async (req, res) => {
     })
   );
 
+  await Expense.create({ groupId });
+
   res.status(200).json({
     msg: "Group Created Successfully",
     group,
@@ -200,7 +202,16 @@ router.get("/singleGroupDebts", async (req, res) => {
   });
 });
 
-router.get("/allExpenses", (req, res) => {});
+router.get("/allExpenses", async (req, res) => {
+  const groupId = req.body.groupId;
+
+  const expenses = await Expense.findOne({ groupId });
+
+  res.status(200).json({
+    msg: "Expenses found successfully",
+    expenses,
+  });
+});
 
 router.post("/newExpense", (req, res) => {});
 

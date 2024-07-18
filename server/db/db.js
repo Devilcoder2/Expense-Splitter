@@ -119,7 +119,10 @@ const expensesSchema = new Schema({
     ref: "Group",
     required: true,
   },
-  singleExpenses: [singleExpensesSchema],
+  singleExpenses: {
+    type: [singleExpensesSchema],
+    default: [],
+  },
 });
 
 userSchema.pre("save", async function (next) {
