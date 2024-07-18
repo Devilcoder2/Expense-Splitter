@@ -89,7 +89,22 @@ router.get("/allGroupsDebts", async (req, res) => {
 
 router.post("/newGroup", (req, res) => {});
 
-router.get("/myProfile", (req, res) => {});
+router.get("/myProfile", async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({
+      msg: "User not found",
+    });
+  }
+
+  res.status(200).json({
+    msg: "Successfully fond the user",
+    user,
+  });
+});
 
 router.get("/allGroups", (req, res) => {});
 
