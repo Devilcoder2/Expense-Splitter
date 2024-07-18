@@ -181,7 +181,24 @@ router.get("/groupDetails", async (req, res) => {
   });
 });
 
-router.get("/singleGroupDebts", (req, res) => {});
+router.get("/singleGroupDebts", async (req, res) => {
+  const groupId = req.body.groupId;
+  const email = req.body.email;
+
+  const group = await Group.findById(groupId);
+  const members = group.members;
+
+  const user = await User.findOne({ email });
+
+  const filteredUser = members.filter((member) => {
+    return member.userId.toString() === user._id.toString();
+  });
+
+  res.status(200).json({
+    msg: "Debt found successfully",
+    filteredUser,
+  });
+});
 
 router.get("/allExpenses", (req, res) => {});
 
