@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { User } = require("./../db/db.js");
+const { User, Group } = require("./../db/db.js");
 
 const JWT_SECRET = "raman";
 
@@ -106,7 +106,30 @@ router.get("/myProfile", async (req, res) => {
   });
 });
 
-router.get("/allGroups", (req, res) => {});
+router.get("/allGroups", async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      msg: "User not found",
+    });
+  }
+
+  const groupIds = user.groups;
+
+  const groupDetails = await Group.find({
+    _id: { $in: groupIds },
+  });
+
+  res.status(200).json({
+    msg: "All groups details foudn successfully",
+    groupDetails,
+  });
+});
 
 router.get("/groupDetails", (req, res) => {});
 
