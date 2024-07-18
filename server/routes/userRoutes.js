@@ -170,7 +170,16 @@ router.get("/allGroups", async (req, res) => {
   });
 });
 
-router.get("/groupDetails", (req, res) => {});
+router.get("/groupDetails", async (req, res) => {
+  const groupId = req.body.groupId;
+
+  const group = await Group.findById(groupId);
+
+  res.status(200).json({
+    msg: "Group Found successfully",
+    group,
+  });
+});
 
 router.get("/singleGroupDebts", (req, res) => {});
 
