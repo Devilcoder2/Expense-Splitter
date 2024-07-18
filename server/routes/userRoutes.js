@@ -65,7 +65,27 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/allGroupsDebts", (req, res) => {});
+router.get("/allGroupsDebts", async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({ email });
+
+  //will remove this when added middleware
+  if (!user) {
+    return res.status(400).json({
+      msg: "Email not found",
+    });
+  }
+
+  const owedByYou = user.totalOwedByYou;
+  const owedToMe = user.totalOwedToMe;
+
+  res.status(200).json({
+    msg: "Successfully found all debts",
+    owedByYou,
+    owedToMe,
+  });
+});
 
 router.post("/newGroup", (req, res) => {});
 
