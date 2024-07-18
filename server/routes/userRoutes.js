@@ -213,6 +213,28 @@ router.get("/allExpenses", async (req, res) => {
   });
 });
 
-router.post("/newExpense", (req, res) => {});
+router.post("/newExpense", async (req, res) => {
+  const groupId = req.body.groupId;
+  const description = req.body.description;
+  const totalAmount = req.body.totalAmount;
+  const splittedBy = req.body.splittedBy;
+  const userInExpsense = req.body.userInExpense;
+
+  const singleExpense = {
+    description,
+    totalAmount,
+    splittedBy,
+    userInExpsense,
+  };
+
+  const expense = await Expense.findOne({ groupId });
+  expense.singleExpenses.push(singleExpense);
+  await expense.save();
+
+  res.status(200).json({
+    msg: "Expense added successfully",
+    singleExpense,
+  });
+});
 
 module.exports = router;
