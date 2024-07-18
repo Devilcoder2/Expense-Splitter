@@ -87,7 +87,46 @@ router.get("/allGroupsDebts", async (req, res) => {
   });
 });
 
-router.post("/newGroup", (req, res) => {});
+router.post("/newGroup", async (req, res) => {
+  const groupName = req.body.groupName;
+  const email = req.body.email;
+  const members = req.body.members;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({
+      msg: "User not found",
+    });
+  }
+
+  const admin = user._id;
+
+  const allMembers = [...members, { userId: admin }];
+
+  const group = await Group.create({
+    groupName,
+    admin,
+    members: allMembers,
+  });
+
+  const groupId = group._id;
+
+  await Promise.all(
+    allMembers.map(async (member) => {
+      await User.findByIdAndUpdate(
+        member.userId,
+        { $push: { groups: groupId } },
+        { new: true, useFindAndModify: false }
+      );
+    })
+  );
+
+  res.status(200).json({
+    msg: "Group Created Successfully",
+    group,
+  });
+});
 
 router.get("/myProfile", async (req, res) => {
   const email = req.body.email;

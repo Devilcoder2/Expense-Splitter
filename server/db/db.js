@@ -71,6 +71,7 @@ const groupsSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Expense",
+      default: [],
     },
   ],
 });
