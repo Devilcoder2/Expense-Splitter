@@ -1,4 +1,5 @@
 import Header from "./Components/HomePage/Header";
+//import Splitter from "./Components/SplitterPage/Splitter";
 
 const App = () => {
   return (

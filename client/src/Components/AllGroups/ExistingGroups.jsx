@@ -1,7 +1,9 @@
-const ExistingGroups = () => {
+import PropTypes from "prop-types";
+
+const ExistingGroups = ({ groups }) => {
   return (
     <div className="bg-pink-100 mt-4">
-      <div className="flex justify-center mb-4 ">
+      <div className="flex justify-center mb-4">
         <input
           type="text"
           placeholder="Enter Group Name..."
@@ -11,39 +13,32 @@ const ExistingGroups = () => {
           Search Group
         </button>
       </div>
-
       <div className="grid grid-cols-6 gap-4">
-        <div className="text-center">
-          <img
-            src="https://w7.pngwing.com/pngs/962/948/png-transparent-bitstrips-avatar-sticker-snap-inc-cheering-grads-mammal-heroes-hand.png"
-            className="w-16 h-16 rounded-full object-cover mx-auto"
-          />
-          <div>Group 1</div>
-        </div>
-        <div className="text-center">
-          <img
-            src="https://w7.pngwing.com/pngs/962/948/png-transparent-bitstrips-avatar-sticker-snap-inc-cheering-grads-mammal-heroes-hand.png"
-            className="w-16 h-16 rounded-full object-cover mx-auto"
-          />
-          <div>Group 1</div>
-        </div>
-        <div className="text-center">
-          <img
-            src="https://w7.pngwing.com/pngs/962/948/png-transparent-bitstrips-avatar-sticker-snap-inc-cheering-grads-mammal-heroes-hand.png"
-            className="w-16 h-16 rounded-full object-cover mx-auto"
-          />
-          <div>Group 1</div>
-        </div>
-        <div className="text-center">
-          <img
-            src="https://w7.pngwing.com/pngs/962/948/png-transparent-bitstrips-avatar-sticker-snap-inc-cheering-grads-mammal-heroes-hand.png"
-            className="w-16 h-16 rounded-full object-cover mx-auto"
-          />
-          <div>Group 1</div>
-        </div>
+        {groups.map((group) => (
+          <div key={group._id} className="text-center">
+            <img
+              src={
+                group.image ||
+                "https://w7.pngwing.com/pngs/962/948/png-transparent-bitstrips-avatar-sticker-snap-inc-cheering-grads-mammal-heroes-hand.png"
+              }
+              className="w-16 h-16 rounded-full object-cover mx-auto"
+            />
+            <div className="font-bold">{group.groupName}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
+};
+
+ExistingGroups.propTypes = {
+  groups: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      image: PropTypes.string,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default ExistingGroups;

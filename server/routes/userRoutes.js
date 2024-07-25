@@ -13,13 +13,13 @@ router.post("/register", async (req, res) => {
   const password = req.body.password;
   const image = req.body.image;
 
-  const userExists = await User.find({ email });
+  /* const userExists = await User.find({ email });
 
   if (userExists.length !== 0) {
     return res.status(200).json({
       msg: "User alerady exits",
     });
-  }
+  } */
 
   const user = await User.create({
     name,

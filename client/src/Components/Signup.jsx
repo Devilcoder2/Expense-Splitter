@@ -2,9 +2,40 @@ import { AiOutlineUnlock } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { TfiEmail } from "react-icons/tfi";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/user/register",
+        formData
+      );
+      if (response.data.msg === "Account created successfully") {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("There was an error creating the account!", error);
+    }
+  };
+
   return (
     <div
       className="text-white h-[100vh] flex justify-center items-center bg-cover"
@@ -15,18 +46,22 @@ const Signup = () => {
     >
       <div>
         <div className="bg-slate-800 border border-slate-400 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative ">
-          <h1 className="text-4xl text-whitefont-bold text-center mb-6">
+          <h1 className="text-4xl text-white font-bold text-center mb-6">
             Signup
           </h1>
-          <form action="">
+          <form onSubmit={handleSubmit}>
             <div className="relative my-4">
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 className="block w-72 py-2 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:text-white focus:border-blue-600 peer"
                 placeholder=""
+                required
               />
               <label
-                htmlFor=""
+                htmlFor="name"
                 className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-2 left-0 origin-[0] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Your Name
@@ -36,11 +71,15 @@ const Signup = () => {
             <div className="relative my-4">
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="block w-72 py-2 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:text-white focus:border-blue-600 peer"
                 placeholder=""
+                required
               />
               <label
-                htmlFor=""
+                htmlFor="email"
                 className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-2 left-0 -z-10 origin-[0] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Your Email
@@ -50,11 +89,15 @@ const Signup = () => {
             <div className="relative my-4">
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="block w-72 py-2 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:text-white focus:border-blue-600 peer"
                 placeholder=""
+                required
               />
               <label
-                htmlFor=""
+                htmlFor="password"
                 className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-2 left-0 -z-10 origin-[0] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Your Password
