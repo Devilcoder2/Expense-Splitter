@@ -28,7 +28,9 @@ const Login = () => {
         "http://localhost:3000/user/login",
         formData
       );
+
       if (response.data.msg === "User Login Successfull") {
+        localStorage.setItem("token", response.token);
         navigate("/groups");
       }
     } catch (error) {

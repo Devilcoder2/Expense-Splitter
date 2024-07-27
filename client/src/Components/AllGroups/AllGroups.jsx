@@ -12,6 +12,9 @@ const AllGroups = () => {
   const userEmail = "your_email@example.com";
 
   const fetchDebts = async () => {
+    localStorage.setItem("userEmail", "xyz@gmail.com");
+    const userEmail = localStorage.getItem("userEmail");
+
     try {
       const response = await axios.post(
         "http://localhost:3000/user/allGroupsDebts",
@@ -32,6 +35,7 @@ const AllGroups = () => {
 
   const fetchProfile = async () => {
     try {
+      localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:3000/user/myProfile",
         { email: userEmail }
