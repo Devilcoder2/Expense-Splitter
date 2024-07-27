@@ -29,8 +29,8 @@ const Login = () => {
         formData
       );
 
-      if (response.data.msg === "User Login Successfull") {
-        localStorage.setItem("token", response.token);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
         navigate("/groups");
       }
     } catch (error) {

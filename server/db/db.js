@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-mongoose.connect(
-  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.12"
-);
+mongoose.connect("mongodb://localhost:27017/expenseSplitter");
 console.log("connecting to Mongo");
 const Schema = mongoose.Schema;
 

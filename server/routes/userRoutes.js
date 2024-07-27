@@ -66,11 +66,12 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/allGroupsDebts", async (req, res) => {
-  const email = req.body.email;
+  const token = req.headers.authorization;
+  const email = jwt.verify(token, JWT_SECRET);
 
   const user = await User.findOne({ email });
 
-  //will remove this when added middleware
+  // will remove this when added middleware
   if (!user) {
     return res.status(400).json({
       msg: "Email not found",
@@ -89,8 +90,9 @@ router.get("/allGroupsDebts", async (req, res) => {
 
 router.post("/newGroup", async (req, res) => {
   const groupName = req.body.groupName;
-  const email = req.body.email;
   const members = req.body.members;
+  const token = req.headers.authorization;
+  const email = jwt.verify(token, JWT_SECRET);
 
   const user = await User.findOne({ email });
 
@@ -131,7 +133,9 @@ router.post("/newGroup", async (req, res) => {
 });
 
 router.get("/myProfile", async (req, res) => {
-  const email = req.body.email;
+  const token = req.headers.authorization;
+
+  const email = jwt.verify(token, JWT_SECRET);
 
   const user = await User.findOne({ email });
 
@@ -148,7 +152,8 @@ router.get("/myProfile", async (req, res) => {
 });
 
 router.get("/allGroups", async (req, res) => {
-  const email = req.body.email;
+  const token = req.headers.authorization;
+  const email = jwt.verify(token, JWT_SECRET);
 
   const user = await User.findOne({
     email,
@@ -234,6 +239,15 @@ router.post("/newExpense", async (req, res) => {
   res.status(200).json({
     msg: "Expense added successfully",
     singleExpense,
+  });
+});
+
+router.get("/allUsers", async (req, res) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    msg: "Successful",
+    users,
   });
 });
 
