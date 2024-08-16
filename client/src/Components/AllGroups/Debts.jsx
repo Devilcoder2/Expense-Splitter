@@ -28,16 +28,14 @@ const Debts = () => {
   return (
     <div className="flex space-x-8 ml-10  rounded-md p-2">
       <div className="text-center ">
-        <div className="text-lg font-semibold text-gray-700">
+        <div className="text-xl font-bold text-gray-700">
           ₹{debts.owedByYou}
         </div>
-        <div className="text-sm font-light text-gray-600">Owed by you</div>
+        <div className="text-lg font-bold text-gray-600">Owed by you</div>
       </div>
       <div className="text-center">
-        <div className="text-lg font-semibold text-gray-700">
-          ₹{debts.owedToMe}
-        </div>
-        <div className="text-sm font-light text-gray-600">Owed to you</div>
+        <div className="text-xl font-bold text-gray-700">₹{debts.owedToMe}</div>
+        <div className="text-lg font-bold text-gray-600">Owed to you</div>
       </div>
     </div>
   );
