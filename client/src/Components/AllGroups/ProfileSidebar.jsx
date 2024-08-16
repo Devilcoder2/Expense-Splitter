@@ -18,7 +18,14 @@ const ProfileSidebar = () => {
   return (
     <div>
       <div>
-        <button onClick={getMyProfileHandler}>Get my profile</button>
+        <div className="flex items-center justify-center py-2 ">
+          <button onClick={getMyProfileHandler} className="p-[3px] relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+            <div className="px-8 py-2 font-bold bg-white rounded-[6px] relative group transition duration-200 text-black hover:bg-transparent">
+              Your Profile
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   );
