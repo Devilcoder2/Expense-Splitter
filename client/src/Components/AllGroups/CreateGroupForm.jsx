@@ -56,13 +56,13 @@ const CreateGroupForm = ({ setIsFormVisible, setIsChanged }) => {
     setAreAllMembersVisible(false);
   };
 
-  const addThisMember = (userId) => {
+  const addThisMember = (userId, userName) => {
     setAddedMembers((prev) => {
       const isUserPresent = prev.filter((uid) => uid === userId);
 
       if (isUserPresent.length !== 0) return prev;
 
-      const newMembers = [...prev, userId];
+      const newMembers = [...prev, {userId, userName}];
       return newMembers;
     });
   };
@@ -113,12 +113,12 @@ const CreateGroupForm = ({ setIsFormVisible, setIsChanged }) => {
 
         {/* members */}
         <div className="mb-4">
-          {addedMembers.map((userId) => (
+          {addedMembers.map(({userId, userName}) => (
             <div
               className="flex items-center justify-between mb-2"
               key={userId}
             >
-              <h1 className="font-semibold text-gray-800">{userId}</h1>
+              <h1 className="font-semibold text-gray-800">{userName}</h1>
               <button
                 className="text-red-500 hover:text-red-700 focus:outline-none"
                 onClick={() => deleteThisUserHandler(userId)}
@@ -147,7 +147,7 @@ const CreateGroupForm = ({ setIsFormVisible, setIsChanged }) => {
                   <h1 className="font-bold text-gray-800">{user.name}</h1>
                   <button
                     className="text-green-500 hover:text-green-700 focus:outline-none"
-                    onClick={() => addThisMember(user._id)}
+                    onClick={() => addThisMember(user._id, user.name)}
                   >
                     Add
                   </button>
