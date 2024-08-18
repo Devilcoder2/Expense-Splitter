@@ -110,7 +110,7 @@ const singleExpensesSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  userInExpsense: [userInExpenseSchema],
+  userInExpense: [userInExpenseSchema],
 });
 
 const expensesSchema = new Schema({

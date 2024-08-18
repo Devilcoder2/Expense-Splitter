@@ -2,6 +2,7 @@ const { Router } = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { User, Group, Expense } = require("./../db/db.js");
+const mongoose = require("mongoose");
 
 const JWT_SECRET = "raman";
 
@@ -177,10 +178,14 @@ router.get("/allGroups", async (req, res) => {
   });
 });
 
-router.get("/groupDetails", async (req, res) => {
-  const groupId = req.body.groupId;
+router.get("/groupDetails/:groupId", async (req, res) => {
+  const { groupId } = req.params;
 
   const group = await Group.findById(groupId);
+  const objectId = new mongoose.Types.ObjectId(groupId); // Convert string to ObjectId
+  const expenses = await Expense.find({ groupId: objectId });
+
+  group.expenses = expenses[0].singleExpenses;
 
   res.status(200).json({
     msg: "Group Found successfully",
@@ -218,8 +223,8 @@ router.get("/singleGroupDebts", async (req, res) => {
   });
 });
 
-router.get("/allExpenses", async (req, res) => {
-  const groupId = req.body.groupId;
+router.get("/allExpenses/:groupId", async (req, res) => {
+  const { groupId } = req.params;
 
   const expenses = await Expense.findOne({ groupId });
 
@@ -233,72 +238,81 @@ router.post("/newExpense", async (req, res) => {
   const { groupId, description, totalAmount, splittedBy, userInExpense } =
     req.body;
 
-  // Fetch the group by ID
-  const group = await Group.findById(groupId);
-  const membersInGroup = group.members;
-
-  // Traverse userInExpense and update owedByYou in membersInGroup
-  let isSplittedByMemberInUserInExpense = false;
-  userInExpense.forEach(({ userId, amountToPay }) => {
-    const member = membersInGroup.find((member) => {
-      isSplittedByMemberInUserInExpense =
-        member.userId.toString() === splittedBy;
-      return (
-        member.userId.toString() === userId &&
-        member.userId.toString() !== splittedBy
-      );
-    });
-    if (member) {
-      member.owedByYou += amountToPay;
+  try {
+    // Fetch the group by ID
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ msg: "Group not found" });
     }
-  });
+    const membersInGroup = group.members;
 
-  const splittedByMember = membersInGroup.find(
-    (member) => member.userId.toString() === splittedBy
-  );
-  if (splittedByMember) {
-    if (isSplittedByMemberInUserInExpense) {
-      const minusAmount = userInExpense.find(
-        ({ userId, amountToPay }) => userId === splittedBy
-      );
-
-      splittedByMember.owedToMe += totalAmount - minusAmount.amountToPay;
-    } else splittedByMember.owedToMe += totalAmount;
-  }
-
-  const singleExpense = {
-    description,
-    totalAmount,
-    splittedBy,
-    userInExpense,
-  };
-
-  // Check if an expense document already exists for the groupId
-  let expense = await Expense.findOne({ groupId });
-
-  // If it's the first expense, create a new expense document
-  if (!expense) {
-    expense = new Expense({
-      groupId,
-      singleExpenses: [singleExpense],
+    // Traverse userInExpense and update owedByYou in membersInGroup
+    let isSplittedByMemberInUserInExpense = false;
+    userInExpense.forEach(({ userId, amountToPay }) => {
+      const member = membersInGroup.find((member) => {
+        isSplittedByMemberInUserInExpense =
+          member.userId.toString() === splittedBy;
+        return (
+          member.userId.toString() === userId &&
+          member.userId.toString() !== splittedBy
+        );
+      });
+      if (member) {
+        member.owedByYou += amountToPay;
+      }
     });
-  } else {
-    // If the document exists, add the new expense to the singleExpenses array
-    expense.singleExpenses.push(singleExpense);
+
+    const splittedByMember = membersInGroup.find(
+      (member) => member.userId.toString() === splittedBy
+    );
+    if (splittedByMember) {
+      if (isSplittedByMemberInUserInExpense) {
+        const minusAmount = userInExpense.find(
+          ({ userId, amountToPay }) => userId === splittedBy
+        );
+        splittedByMember.owedToMe += totalAmount - minusAmount.amountToPay;
+      } else {
+        splittedByMember.owedToMe += totalAmount;
+      }
+    }
+
+    const singleExpense = {
+      description,
+      totalAmount,
+      splittedBy,
+      userInExpense,
+    };
+
+    console.log(userInExpense);
+
+    // Check if an expense document already exists for the groupId
+    let expense = await Expense.findOne({ groupId });
+
+    // If it's the first expense, create a new expense document
+    if (!expense) {
+      expense = new Expense({
+        groupId,
+        singleExpenses: [singleExpense],
+      });
+    } else {
+      // If the document exists, add the new expense to the singleExpenses array
+      expense.singleExpenses.push(singleExpense);
+    }
+
+    // Save the updated group with the new owedByYou values
+    await group.save();
+
+    // Save the expense document
+    await expense.save();
+
+    res.status(200).json({
+      msg: "Expense added successfully",
+      singleExpense,
+    });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error });
   }
-
-  // Save the updated group with the new owedByYou values
-  await group.save();
-
-  // Save the expense document
-  await expense.save();
-
-  res.status(200).json({
-    msg: "Expense added successfully",
-    singleExpense,
-  });
 });
-
 router.get("/allUsers", async (req, res) => {
   const users = await User.find();
 

@@ -2,7 +2,7 @@ import { RxAvatar } from "react-icons/rx";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 
-const SplitterHeader = () => {
+const SplitterHeader = (props) => {
   return (
     <div className="flex justify-between pt-3 items-center ">
       {/* Backbutton  */}
@@ -17,7 +17,7 @@ const SplitterHeader = () => {
         <h3 className="mr-2">
           <RxAvatar fontSize={"40px"} />
         </h3>
-        <h1 className=" text-xl">Group Name</h1>
+        <h1 className=" text-xl">{props.groupName}</h1>
       </div>
 
       {/* Owned by you / to  */}

@@ -3,10 +3,10 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Features from "./Components/Features.jsx";
-import Login from "./Components/Login.jsx";
-import Signup from "./Components/Signup.jsx";
+import Login from "./Components/HomePage/Login.jsx";
+import Signup from "./Components/HomePage/Signup.jsx";
 import AllGroups from "./Components/AllGroups/AllGroups.jsx";
+import Splitter from "./Components/SplitterPage/Splitter.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +18,8 @@ const router = createBrowserRouter([
     element: <AllGroups />,
   },
   {
-    path: "/features",
-    element: <Features />,
+    path: "/group/:groupId",
+    element: <Splitter />,
   },
   {
     path: "/login",
