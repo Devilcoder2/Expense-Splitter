@@ -1,186 +1,216 @@
-import axios from "axios";
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { IoAddOutline } from 'react-icons/io5';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
-const CreateGroupForm = ({ setIsFormVisible, setIsChanged }) => {
-  const [userName, setUserName] = useState("");
-  const [description, setDescription] = useState("");
-  const [allUsers, setAllUsers] = useState(null);
-  const [areAllMembersVisible, setAreAllMembersVisible] = useState(false);
-  const [addedMembers, setAddedMembers] = useState([]);
+const CreateGroupForm = ({ setIsFormVisible }) => {
+    const [groupName, setGroupName] = useState('');
+    const [groupDescription, setGroupDescription] = useState('');
+    const [users, setUsers] = useState(null); 
+    const [isGroupNameError, setIsGroupNameError] = useState(false);
+    const [isGroupDesError, setIsGroupDesError] = useState(false);
+    const [membersError, setMembersError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-  const userNameChangeHandler = (e) => {
-    setUserName(e.target.value);
-  };
-
-  const descriptionChangeHandler = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const submitHandler = async () => {
-    const token = localStorage.getItem("token");
-    const members = addedMembers.map((userId) => {
-      return { userId: userId };
-    });
-
-    const body = {
-      groupName: userName,
-      members: members,
+    const fetchUsers = async () => {
+        const response = await axios.get('http://localhost:3000/user/allUsers');
+        const allUsers = response.data.users.map((user) => ({
+            ...user,
+            isAdded: false,
+        }));
+        setUsers(allUsers);
     };
 
-    const response = await axios.post(
-      "http://localhost:3000/user/newGroup",
-      body,
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
-    if (response.status === 200) {
-      setIsChanged((prev) => !prev);
-    }
-  };
+    const groupNameChangeHandler = (e) => {
+        setGroupName(e.target.value);
+        setIsGroupNameError(false);
+    };
 
-  const cancelHandler = () => {
-    setIsFormVisible(false);
-  };
+    const groupDescriptionChangeHandler = (e) => {
+        setGroupDescription(e.target.value);
+        setIsGroupDesError(false);
+    };
 
-  const addMembersHandler = async () => {
-    setAreAllMembersVisible(true);
-    const response = await axios.get("http://localhost:3000/user/allUsers");
-    setAllUsers(response.data.users);
-  };
+    // a + => userId
+    // b -
+    // c -
 
-  const cancelAddMemberHandler = () => {
-    setAreAllMembersVisible(false);
-  };
+    // prev -> [{_id: , name: , isAdded: }, {_id: , name: , isAdded: }, {_id: , name: , isAdded: }]
 
-  const addThisMember = (userId, userName) => {
-    setAddedMembers((prev) => {
-      const isUserPresent = prev.filter((uid) => uid === userId);
+    const addMemberHandler = (userId) => {
+        setUsers((prev) => {
+            const newUsers = prev.map((user) => {
+                if (user._id === userId) {
+                    return { ...user, isAdded: !user.isAdded };
+                }
+                return user;
+            });
 
-      if (isUserPresent.length !== 0) return prev;
+            return newUsers;
+        });
 
-      const newMembers = [...prev, {userId, userName}];
-      return newMembers;
-    });
-  };
+        setMembersError(false);
+    };
 
-  const deleteThisUserHandler = (userId) => {
-    setAddedMembers((prev) => {
-      const newMembers = prev.filter((uId) => uId !== userId);
-      return newMembers;
-    });
-  };
+    const cancelModalHandler = () => {
+        setIsFormVisible(false);
+    };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-purple-500 to-gray-200">
-      <div className="border border-gray-400 bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        {/* name */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="userName"
-          >
-            Name
-          </label>
-          <input
-            id="userName"
-            className="border border-gray-300 rounded-md w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            type="text"
-            value={userName}
-            onChange={userNameChangeHandler}
-          />
-        </div>
+    const formSubmitHandler = async () => {
+        if (groupName.trim().length === 0) {
+            setIsGroupNameError(true);
+            setErrorMessage('Every group should have a name!');
+            return;
+        }
 
-        {/* description */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="description"
-          >
-            Description
-          </label>
-          <input
-            id="description"
-            className="border border-gray-300 rounded-md w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            type="text"
-            value={description}
-            onChange={descriptionChangeHandler}
-          />
-        </div>
+        if (groupDescription.trim().length === 0) {
+            setIsGroupDesError(true);
+            setErrorMessage('Please add a description');
+            return;
+        }
 
-        {/* members */}
-        <div className="mb-4">
-          {addedMembers.map(({userId, userName}) => (
-            <div
-              className="flex items-center justify-between mb-2"
-              key={userId}
-            >
-              <h1 className="font-semibold text-gray-800">{userName}</h1>
-              <button
-                className="text-red-500 hover:text-red-700 focus:outline-none"
-                onClick={() => deleteThisUserHandler(userId)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-          <button
-            className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            onClick={addMembersHandler}
-          >
-            Add members
-          </button>
-        </div>
+        const filteredMembers = users.filter((user) => user.isAdded === true);
+        if (filteredMembers.length === 0) {
+            setMembersError(true);
+            setErrorMessage('Please add atleast 1 member!');
+            return;
+        }
 
-        {/* show all users */}
-        {areAllMembersVisible && allUsers !== null && (
-          <div className="mb-4">
-            <div className="flex flex-col space-y-2">
-              {allUsers.map((user) => (
-                <div
-                  className="flex items-center justify-between"
-                  key={user._id}
+        const addedMembers = filteredMembers.map((user) => {
+            const newUserObj = {
+                userId: user._id,
+                name: user.name,
+            };
+
+            return newUserObj;
+        });
+
+        const token = localStorage.getItem('token');
+        const body = {
+            groupName: groupName,
+            members: addedMembers,
+        };
+
+        const response = await axios.post(
+            'http://localhost:3000/user/newGroup',
+            body,
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
+        );
+
+        setIsFormVisible(false);
+    };
+
+    return (
+        <div className='flex flex-col'>
+            {/* GROUP NAME  */}
+            <div className='flex flex-col mb-4'>
+                <label
+                    htmlFor='groupName'
+                    className='text-lg font-semibold mb-2'
                 >
-                  <h1 className="font-bold text-gray-800">{user.name}</h1>
-                  <button
-                    className="text-green-500 hover:text-green-700 focus:outline-none"
-                    onClick={() => addThisMember(user._id, user.name)}
-                  >
-                    Add
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              className="w-full py-2 mt-4 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
-              onClick={cancelAddMemberHandler}
-            >
-              Cancel
-            </button>
-          </div>
-        )}
+                    Group Name
+                </label>
+                <input
+                    type='text'
+                    name='groupName'
+                    id='groupName'
+                    value={groupName}
+                    onChange={groupNameChangeHandler}
+                    placeholder='Enter Group Name'
+                    className='outline-none px-4 py-2 border border-gray-700 rounded-md '
+                />
 
-        {/* submit and cancel */}
-        <div className="flex space-x-4">
-          <button
-            className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            onClick={submitHandler}
-          >
-            Submit
-          </button>
-          <button
-            className="w-full py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-            onClick={cancelHandler}
-          >
-            Cancel
-          </button>
+                {isGroupNameError && (
+                    <div className='text-red-600 mt-1'>{errorMessage}</div>
+                )}
+            </div>
+
+            {/* GROUP DESCRIPTION  */}
+            <div className='flex flex-col'>
+                <label
+                    htmlFor='groupDescription'
+                    className='text-lg font-semibold mb-2'
+                >
+                    Group Description
+                </label>
+                <input
+                    type='text'
+                    name='groupDescription'
+                    id='groupDescription'
+                    value={groupDescription}
+                    onChange={groupDescriptionChangeHandler}
+                    placeholder='Enter Description for group'
+                    className='outline-none px-4 py-2 border border-gray-700 rounded-md '
+                />
+
+                {isGroupDesError && (
+                    <div className='text-red-600 mt-1'>{errorMessage}</div>
+                )}
+            </div>
+
+            {/* ALL USERS LIST  */}
+            <div className='my-5 space-y-2 h-60  overflow-y-scroll scrollbar-hide'>
+                {membersError && (
+                    <div className='text-red-600 -mt-2'>{errorMessage}</div>
+                )}
+                {users !== null &&
+                    users.map((user) => {
+                        return (
+                            <div
+                                key={user._id}
+                                className='flex justify-between'
+                            >
+                                <div>{user.name}</div>
+
+                                <div
+                                    onClick={() => {
+                                        addMemberHandler(user._id);
+                                    }}
+                                    className={`${
+                                        user.isAdded
+                                            ? 'bg-red-700'
+                                            : 'bg-gray-500'
+                                    } w-6 h-6 text-white rounded-md px-1 py-1 text-center cursor-pointer`}
+                                >
+                                    {user.isAdded ? (
+                                        <FaRegTrashAlt />
+                                    ) : (
+                                        <IoAddOutline />
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+            </div>
+
+            {/* SUBMIT & CANCEL BUTTON  */}
+            <div className='flex mt-8 justify-between'>
+                <div
+                    onClick={cancelModalHandler}
+                    className=' bg-red-700 px-3 py-2 rounded-md text-white hover:cursor-pointer'
+                >
+                    Cancel
+                </div>
+
+                <div
+                    onClick={formSubmitHandler}
+                    className=' bg-[#232534] px-3 py-2 rounded-md text-white hover:cursor-pointer'
+                >
+                    Submit
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default CreateGroupForm;

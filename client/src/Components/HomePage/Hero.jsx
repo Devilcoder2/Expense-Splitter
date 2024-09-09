@@ -1,3 +1,4 @@
+//React imports 
 import { useEffect, useState, useRef } from "react";
 
 const Hero = () => {
@@ -35,16 +36,20 @@ const Hero = () => {
         }`}
       >
         <div>
+          {/* HEADING  */}
           <h1 className="text-4xl text-white font-bold mb-10 -mt-14">
             Bring everyone together and get organised with{" "}
             <span className="text-black">Splitster</span>
           </h1>
+
           <p className="text-lg">
             Eliminate the hassle of endless back-and-forth and disputes over who
             owes what. With ALL IN, effortlessly organize your social events and
             holidays, bringing everyone together seamlessly. It’s the only app
             you need to stay organized and stress-free.
           </p>
+
+          {/* BUTTONS  */}
           <button className="px-8 py-2 mt-4 rounded-lg relative bg-slate-800 text-white text-sm hover:shadow-2xl hover:shadow-white/[0.1] transition duration-200 border hover:scale-110 border-slate-600">
             <div className="absolute inset-x-0 h-px w-1/2 mx-auto -top-px shadow-2xl bg-gradient-to-r from-transparent via-teal-500 to-transparent" />
             <span className="relative z-20">Get Splitster</span>
@@ -52,6 +57,7 @@ const Hero = () => {
         </div>
       </div>
 
+        {/* LANDING PAGE IMAGE  */}
       <div
         className={`w-1/2 flex items-center justify-center p-4 ${
           isVisible ? "animate__animated animate__zoomIn" : ""

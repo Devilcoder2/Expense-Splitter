@@ -1,18 +1,26 @@
+//React icons imports 
 import { AiOutlineUnlock } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { TfiEmail } from "react-icons/tfi";
-import { Link, useNavigate } from "react-router-dom";
+
+//react imports 
 import { useState } from "react";
+
+//other imports
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
+
+  //to store the details entered by user 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
+  //to handle input changes 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,8 +29,9 @@ const Signup = () => {
     }));
   };
 
+  //when signup form gets submitted 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //prevent page from reloading 
     try {
       const response = await axios.post(
         "http://localhost:3000/user/register",
@@ -46,10 +55,13 @@ const Signup = () => {
     >
       <div>
         <div className="bg-slate-800 border border-slate-400 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative ">
+          {/* HEADING  */}
           <h1 className="text-4xl text-white font-bold text-center mb-6">
             Signup
           </h1>
+
           <form onSubmit={handleSubmit}>
+            {/* USER NAME  */}
             <div className="relative my-4">
               <input
                 type="text"
@@ -68,6 +80,8 @@ const Signup = () => {
               </label>
               <BiUser className="absolute top-2 right-4" />
             </div>
+
+            {/* USER EMAIL  */}
             <div className="relative my-4">
               <input
                 type="email"
@@ -86,6 +100,8 @@ const Signup = () => {
               </label>
               <TfiEmail className="absolute top-2 right-4" />
             </div>
+            
+            {/* PASSWORD  */}
             <div className="relative my-4">
               <input
                 type="password"
@@ -105,12 +121,15 @@ const Signup = () => {
               <AiOutlineUnlock className="absolute top-2 right-4" />
             </div>
 
+            {/* SIGNUP BUTTON  */}
             <button
               className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-emerald-800 hover:bg-gray-200 py-2 transition-colors duration-300"
               type="submit"
             >
               Signup
             </button>
+
+            {/* SWITCH TO LOGIN PAGE  */}
             <div>
               <span className="m-4">
                 Already have an Account?{" "}

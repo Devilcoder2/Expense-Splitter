@@ -1,15 +1,10 @@
-import Header from "./Components/HomePage/Header";
-import Splitter from "./Components/SplitterPage/Splitter";
-import AllGroups from "./Components/AllGroups/AllGroups"
-
-import 'animate.css';
+import LandingPage from "./Components/HomePage/LandingPage";
+import 'animate.css'; //for animating 
 
 const App = () => {
   return (
     <div>
-      <Header />
-      {/* <Splitter /> */}
-      {/* <AllGroups /> */}
+      <LandingPage />
     </div>
   );
 };

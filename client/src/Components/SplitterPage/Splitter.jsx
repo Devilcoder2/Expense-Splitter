@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import NewSplit from "./NewSplit";
 import SplitHistory from "./SplitHistory";
@@ -35,12 +36,18 @@ const Splitter = () => {
   return (
     <div className="px-10 bg-gradient-to-r from-pink-400 to-pink-600 text-white h-[100vh]">
       {groupDetails !== null && (
-        <SplitterHeader groupName={groupDetails.groupName} />
+        <SplitterHeader groupDetails={groupDetails} />
       )}
 
-      <div className="w-[80vw] h-[80vh] bg-gray-100 rounded-lg mx-auto mt-10 relative">
-        <SplitHistory />
-        <NewSplit />
+      <div className="w-[80vw] h-[80vh] bg-gray-100 rounded-lg mx-auto mt-10 mb-60 relative  overflow-y-scroll">
+        {allExpenses !== null && (
+          <div className="h-[80%] overflow-y-scroll scrollbar-hide mt-10">
+            <SplitHistory allExpenses={allExpenses} />
+          </div>
+        )}
+        {groupDetails !== null && (
+          <NewSplit groupMembers={groupDetails.members} />
+        )}
       </div>
     </div>
   );

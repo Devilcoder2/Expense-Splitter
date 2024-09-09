@@ -1,18 +1,25 @@
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+//react icon imports
 import { TfiEmail } from "react-icons/tfi";
 import { AiOutlineUnlock } from "react-icons/ai";
+
+//react imports 
 import { useState } from "react";
+
+//other imports 
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
 
+  //details entered by user 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  //to handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,8 +28,10 @@ const Login = () => {
     }));
   };
 
+  //handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
       const response = await axios.post(
         "http://localhost:3000/user/login",
@@ -31,12 +40,14 @@ const Login = () => {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
         navigate("/groups");
       }
     } catch (error) {
       console.error("There was an error creating the account!", error);
     }
   };
+
   return (
     <div
       className="text-white h-[100vh] flex justify-center items-center bg-cover"
@@ -47,10 +58,14 @@ const Login = () => {
     >
       <div>
         <div className="bg-slate-800 border border-slate-400 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative ">
+          {/* HEADING  */}
           <h1 className="text-4xl text-whitefont-bold text-center mb-6">
             Login
           </h1>
+          
+          {/* LOGIN FORM  */}
           <form onSubmit={handleSubmit}>
+            {/* EMAIL  */}
             <div className="relative my-4">
               <input
                 type="email"
@@ -69,6 +84,8 @@ const Login = () => {
               </label>
               <TfiEmail className="absolute top-2 right-4" />
             </div>
+
+            {/* PASSWORD  */}
             <div className="relative my-4">
               <input
                 type="password"
@@ -87,6 +104,8 @@ const Login = () => {
               </label>
               <AiOutlineUnlock className="absolute top-2 right-4" />
             </div>
+
+            {/* REMEMBER ME & FORGOT  */}
             <div className="flex justify-between items-center">
               <div className="flex gap-2 items-center">
                 <input type="checkbox" name="" id="" />
@@ -96,12 +115,16 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </div>
+
+            {/* LOGIN BUTTON  */}
             <button
               className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-emerald-800 hover:bg-gray-200 py-2 transition-colors duration-300"
               type="submit"
             >
               Login
             </button>
+            
+            {/* SWITCH TO SIGNUP PAGE  */}
             <div>
               <span className="m-4">
                 New Here?{" "}

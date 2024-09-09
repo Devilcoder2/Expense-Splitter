@@ -8,6 +8,7 @@ import Signup from "./Components/HomePage/Signup.jsx";
 import AllGroups from "./Components/AllGroups/AllGroups.jsx";
 import Splitter from "./Components/SplitterPage/Splitter.jsx";
 
+//1) all routes are defined here
 const router = createBrowserRouter([
   {
     path: "/",

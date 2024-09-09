@@ -1,3 +1,4 @@
+// React imports 
 import { useEffect, useState, useRef } from "react";
 
 const Middle = () => {

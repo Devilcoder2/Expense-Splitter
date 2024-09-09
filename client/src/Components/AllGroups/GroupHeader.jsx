@@ -1,19 +1,28 @@
-import Debts from "./Debts";
-import ProfileSidebar from "./ProfileSidebar";
+import ProfileSidebar from './ProfileSidebar';
+import { LOGO_URL } from '../Helper/contants';
+import CreateNewGroup from './CreateNewGroup';
 
 const GroupHeader = () => {
-  return (
-    <div className="p-4 bg-gray-200">
-      <header className="flex justify-between items-center bg-purple-300 p-4 rounded-md shadow-md">
-        <div className="flex space-x-8 ml-10 border border-gray-300 rounded-lg p-3 bg-white shadow-inner">
-          {/* LOGO */}
+    return (
+        <div className='p-4 bg-pink-600 h-28 flex justify-between'>
+            <div className='animate__animated animate__heartBeat'>
+                <img
+                    src={LOGO_URL}
+                    alt='logo'
+                    className='w-[6.5rem] sm:w-32 pt-2 sm:pt-0'
+                />
+            </div>
 
-          <Debts />
+            <div className='flex justify-between'>
+                <div className='mr-10'>
+                    <CreateNewGroup />
+                </div>
+                <div>
+                    <ProfileSidebar />
+                </div>
+            </div>
         </div>
-        <ProfileSidebar />
-      </header>
-    </div>
-  );
+    );
 };
 
 export default GroupHeader;
