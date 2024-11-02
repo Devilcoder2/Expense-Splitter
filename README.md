@@ -26,8 +26,9 @@ The Expense Splitter is a web application designed to help users manage shared e
 - Historical tracking of expense splits with the ability to create new expenses.
 - Splits visibility: user splits on the right, others' splits on the left.
 
-## Steps to Run Locally
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd expense-splitter
+## Future Updates
+- Option to split expenses in different currencies.
+- Real-time notifications for newly created expenses to all group members.
+- Search functionality for past expenses for easier access and tracking.
+
+## Screenshots 
